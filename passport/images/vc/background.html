@@ -1,237 +1,506 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Passport Background</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #000;
-            padding: 20px;
-        }
-        
-        .background-container {
-            width: 1080px;
-            height: 1920px;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 50%, #1e40af 100%);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-        }
-        
-        /* Passport stamp watermarks */
-        .stamp {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            border: 3px solid rgba(255, 255, 255, 0.08);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.06);
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transform: rotate(-15deg);
-        }
-        
-        .stamp-1 { top: 10%; left: 10%; }
-        .stamp-2 { top: 40%; right: 5%; transform: rotate(20deg); }
-        .stamp-3 { bottom: 20%; left: 15%; transform: rotate(-25deg); }
-        
-        /* Geometric pattern overlay */
-        .pattern {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0.03;
-            background-image: 
-                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px),
-                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px);
-        }
-        
-        /* Globe watermark */
-        .globe {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            height: 600px;
-            border: 2px solid rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-        }
-        
-        .globe::before,
-        .globe::after {
-            content: '';
-            position: absolute;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .globe::before {
-            width: 100%;
-            height: 50%;
-            top: 25%;
-            border-radius: 50%;
-        }
-        
-        .globe::after {
-            width: 50%;
-            height: 100%;
-            left: 25%;
-            border-radius: 50%;
-        }
-        
-        /* Microprint effect */
-        .microprint {
-            position: absolute;
-            width: 100%;
-            font-size: 8px;
-            color: rgba(255, 255, 255, 0.04);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-        
-        .microprint-1 {
-            top: 50px;
-            animation: scroll-left 60s linear infinite;
-        }
-        
-        .microprint-2 {
-            bottom: 50px;
-            animation: scroll-right 70s linear infinite;
-        }
-        
-        @keyframes scroll-left {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
-        
-        @keyframes scroll-right {
-            from { transform: translateX(-50%); }
-            to { transform: translateX(0); }
-        }
-        
-        /* Security guilloché pattern */
-        .guilloche {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.05;
-        }
-        
-        .guilloche svg {
-            width: 100%;
-            height: 100%;
-        }
-        
-        /* Emblem watermark */
-        .emblem {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            height: 400px;
-            opacity: 0.03;
-        }
-        
-        .emblem-circle {
-            fill: none;
-            stroke: white;
-            stroke-width: 2;
-        }
-        
-        /* Corner decorations */
-        .corner {
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .corner-tl { top: 0; left: 0; border-right: none; border-bottom: none; }
-        .corner-tr { top: 0; right: 0; border-left: none; border-bottom: none; }
-        .corner-bl { bottom: 0; left: 0; border-right: none; border-top: none; }
-        .corner-br { bottom: 0; right: 0; border-left: none; border-top: none; }
-        
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>$titleName</title>
 
+    <style>
+      @page {
+        size: A4;
+        margin: 20mm;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Times New Roman", serif;
+      }
+
+      @media print {
+        .credential-card div[style*="border: 2px solid #8b7355"] {
+          width: 90% !important;
+          margin: 0 auto !important;
+        }
+      }
+
+      .page-break {
+        page-break-after: always;
+      }
+
+      .credential-card {
+        position: relative;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-image: url("https://raw.githubusercontent.com/SLUDI-Pilot/public-assets/main/public/passport-vc-background.png");
+        width: calc(210mm - 40mm);
+        margin: 0 auto;
+        box-sizing: border-box;
+        height: auto;
+        min-height: calc(297mm - 40mm);
+      }
+
+      .credential-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0.1;
+        z-index: -1;
+      }
+
+      .credential-card + .credential-card {
+        page-break-before: always;
+        break-before: page;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        font-size: 50px;
+        color: rgba(0, 0, 0, 0.02);
+        font-weight: bold;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 0;
+      }
     </style>
-</head>
-<body>
-    <div class="background-container">
-        <!-- Geometric pattern -->
-        <div class="pattern"></div>
-        
-        <!-- Globe watermark -->
-        <div class="globe"></div>
-        
-        <!-- Passport stamps -->
-        <div class="stamp stamp-1">
-            <div>Immigration<br>Department</div>
+  </head>
+  <body>
+    <div
+      class="page-break credential-card"
+      style="
+        border: 3px solid #8b7355;
+        border-radius: 20px;
+        height: 90vh;
+        max-height: 90vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      "
+    >
+      <div class="watermark">PASSPORT</div>
+
+      <div
+        style="
+          position: relative;
+          z-index: 1;
+          text-align: center;
+          background: rgba(255, 255, 255, 0.55);
+          padding: 18px;
+          border-radius: 17px 17px 0 0;
+          border-bottom: 3px solid #8b7355;
+        "
+      >
+        <div
+          style="
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c2416;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+          "
+        >
+          SRI LANKA PASSPORT
         </div>
-        <div class="stamp stamp-2">
-            <div>Official<br>Document</div>
+        <div
+          style="
+            font-size: 11px;
+            color: #5d4e37;
+            font-style: italic;
+            margin-bottom: 2px;
+          "
+        >
+          Democratic Socialist Republic of Sri Lanka
         </div>
-        <div class="stamp stamp-3">
-            <div>Authorized<br>Credential</div>
+        <div style="font-size: 10px; color: #5d4e37; font-weight: 600">
+          Department of Immigration and Emigration
         </div>
-        
-        <!-- Microprint -->
-        <div class="microprint microprint-1">
-            Department of Immigration & Emigration • Passport Application • Official Document • Department of Immigration & Emigration • Passport Application • Official Document • 
+      </div>
+
+      <div
+        style="
+          position: relative;
+          z-index: 1;
+          flex: 1;
+          display: flex;
+          flex-direction: row;
+          padding: 25px;
+          overflow: hidden;
+        "
+      >
+        <div
+          style="
+            flex: 0 0 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-right: 25px;
+          "
+        >
+          #if(!$face)
+          <div
+            style="
+              width: 160px;
+              height: 200px;
+              background-color: white;
+              border-radius: 10px;
+              border: 3px solid #8b7355;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+              margin-bottom: 20px;
+            "
+          >
+            <img
+              style="width: 60px; height: 60px; opacity: 0.3"
+              src="a571b1a1-3ce6-4230-b190-8c2d5d388096.png"
+              alt="User Icon"
+            />
+          </div>
+          #else
+          <img
+            style="
+              width: 160px;
+              height: 200px;
+              border-radius: 10px;
+              border: 3px solid #8b7355;
+              object-fit: cover;
+              box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+              margin-bottom: 20px;
+            "
+            src="$face"
+            alt="Photo"
+          />
+          #end
+
+          <div
+            style="
+              width: 160px;
+              text-align: center;
+              background: rgba(255, 255, 255, 0.55);
+              padding: 12px;
+              border-radius: 10px;
+              border: 2px solid #8b7355;
+            "
+          >
+            <img
+              style="width: 110px; height: auto; max-height: 110px"
+              src="$logoUrl"
+              alt="Department Logo"
+            />
+            <div
+              style="
+                margin-top: 6px;
+                font-size: 8px;
+                color: #5d4e37;
+                font-weight: bold;
+                text-transform: uppercase;
+              "
+            >
+              Immigration and Emigration
+            </div>
+          </div>
         </div>
-        <div class="microprint microprint-2">
-            Verified Credential • Secure Document • Government Issued • Verified Credential • Secure Document • Government Issued • 
+
+        <div
+          style="
+            flex: 1;
+            background: rgba(255, 255, 255, 0.65);
+            border-radius: 12px;
+            padding: 18px 22px;
+            border: 2px solid #8b7355;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+            overflow-y: auto;
+            max-height: 100%;
+          "
+        >
+          #foreach($entry in $rowProperties.entrySet()) #if($entry.value)
+          <div
+            style="
+              margin-bottom: 12px;
+              border-bottom: 1px solid rgba(139, 115, 85, 0.3);
+              padding-bottom: 8px;
+            "
+          >
+            <div
+              style="
+                font-weight: bold;
+                font-size: 10px;
+                color: #5d4e37;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                margin-bottom: 3px;
+              "
+            >
+              $entry.key
+            </div>
+            <div
+              style="
+                font-size: 14px;
+                color: #2c2416;
+                word-wrap: break-word;
+                line-height: 1.3;
+                font-weight: 500;
+              "
+            >
+              $entry.value
+            </div>
+          </div>
+          #end #end
         </div>
-        
-        <!-- Guilloché pattern -->
-        <div class="guilloche">
-            <svg viewBox="0 0 1080 1920" preserveAspectRatio="xMidYMid slice">
-                <defs>
-                    <pattern id="waves" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-                        <path d="M0,50 Q25,25 50,50 T100,50" fill="none" stroke="white" stroke-width="0.5"/>
-                        <path d="M0,60 Q25,35 50,60 T100,60" fill="none" stroke="white" stroke-width="0.5"/>
-                        <path d="M0,70 Q25,45 50,70 T100,70" fill="none" stroke="white" stroke-width="0.5"/>
-                    </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#waves)"/>
-            </svg>
+      </div>
+
+      <div style="position: relative; z-index: 1; padding: 0 25px 18px 25px">
+        <div
+          style="
+            background: rgba(255, 255, 255, 0.55);
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: 2px solid #8b7355;
+            text-align: center;
+          "
+        >
+          <div style="font-size: 10px; color: #2c2416; line-height: 1.5">
+            <div style="font-weight: bold; margin-bottom: 4px">
+              If found, please return to the nearest Department of Immigration
+              and Emigration office
+            </div>
+            <div style="color: #5d4e37">
+              <strong>Hotline:</strong> 1962 / +94 112 101 500 |
+              <strong>Email:</strong> controller@immigration.gov.lk
+            </div>
+          </div>
         </div>
-        
-        <!-- Emblem -->
-        <div class="emblem">
-            <svg viewBox="0 0 400 400">
-                <circle cx="200" cy="200" r="180" class="emblem-circle"/>
-                <circle cx="200" cy="200" r="150" class="emblem-circle"/>
-                <circle cx="200" cy="200" r="120" class="emblem-circle"/>
-                <path d="M200,80 L220,160 L280,140 L240,200 L300,240 L220,220 L200,300 L180,220 L100,240 L160,200 L120,140 L180,160 Z" 
-                      fill="none" stroke="white" stroke-width="2" class="emblem-circle"/>
-            </svg>
-        </div>
-        
-        <!-- Corner decorations -->
-        <div class="corner corner-tl"></div>
-        <div class="corner corner-tr"></div>
-        <div class="corner corner-bl"></div>
-        <div class="corner corner-br"></div>
+      </div>
     </div>
-</body>
+
+    <div
+      class="credential-card"
+      style="
+        border: 3px solid #8b7355;
+        border-radius: 20px;
+        height: 90vh;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        padding: 25px 35px;
+        overflow: hidden;
+      "
+    >
+      <div class="watermark">VERIFY</div>
+
+      <div
+        style="
+          position: relative;
+          z-index: 1;
+          text-align: center;
+          width: 90%; /* Wider like the first page */
+          margin: 0 auto;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        "
+      >
+        <div>
+          <div style="margin-bottom: 18px">
+            <img
+              style="width: 70px; height: auto; margin-bottom: 10px"
+              src="$logoUrl"
+              alt="Department Logo"
+            />
+            <div
+              style="
+                font-weight: bold;
+                font-size: 22px;
+                color: #2c2416;
+                margin-bottom: 5px;
+                letter-spacing: 0.5px;
+              "
+            >
+              Verify Passport Credential
+            </div>
+            <div style="font-size: 11px; color: #5d4e37; line-height: 1.3">
+              <div style="font-style: italic">
+                Department of Immigration and Emigration
+              </div>
+              <div style="font-style: italic; font-size: 10px">
+                Democratic Socialist Republic of Sri Lanka
+              </div>
+            </div>
+          </div>
+
+          <!-- QR Code -->
+          #if ($qrCodeImage)
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.55);
+              padding: 20px;
+              border-radius: 12px;
+              border: 3px solid #8b7355;
+              box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+              margin-bottom: 15px;
+            "
+          >
+            <div
+              style="
+                background: white;
+                padding: 15px;
+                border-radius: 10px;
+                display: inline-block;
+                border: 2px solid #8b7355;
+              "
+            >
+              <img
+                style="width: 220px; height: 220px; display: block"
+                src="data:image/png;base64,$qrCodeImage"
+                alt="QR Code"
+              />
+            </div>
+          </div>
+          #else
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.55);
+              padding: 20px;
+              border-radius: 12px;
+              border: 3px solid #8b7355;
+              box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+              margin-bottom: 15px;
+            "
+          >
+            <div
+              style="
+                background: white;
+                padding: 15px;
+                border-radius: 10px;
+                display: inline-block;
+                border: 2px solid #8b7355;
+              "
+            >
+              <img
+                style="width: 300px; height: 300px; display: block"
+                src="https://inscode.github.io/inji-passport/qr.png"
+                alt="QR Code"
+              />
+            </div>
+          </div>
+          #end
+
+          <div
+            style="
+              background: rgba(245, 245, 240, 0.65);
+              padding: 15px 20px;
+              border-radius: 10px;
+              border: 2px solid #8b7355;
+              text-align: left;
+              margin: 0 auto 15px auto;
+              width: 90%;
+            "
+          >
+            <div
+              style="
+                font-size: 11px;
+                font-weight: bold;
+                color: #2c2416;
+                margin-bottom: 8px;
+                text-align: center;
+              "
+            >
+              VERIFICATION INSTRUCTIONS
+            </div>
+            <div style="font-size: 9px; color: #2c2416; line-height: 1.6">
+              <strong>1.</strong> To verify a VC, visit
+              <a
+                href="https://injiverify.sdec.mosip.net"
+                style="color: #2c2416; text-decoration: none; font-weight: bold"
+              >
+                E-Locker Verify </a
+              ><br />
+              <strong>2.</strong> Select the <em>Scan QR Code</em> tab<br />
+              <strong>3.</strong> Scan the QR code displayed above<br />
+              <strong>4.</strong> View the relevant details and verify validity
+            </div>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 245, 245, 0.65);
+              padding: 10px 12px;
+              border-radius: 6px;
+              border: 2px solid #c41e3a;
+              margin-bottom: 12px;
+            "
+          >
+            <div
+              style="
+                font-size: 8px;
+                color: #c41e3a;
+                line-height: 1.4;
+                font-weight: 600;
+              "
+            >
+              <strong>SECURITY NOTICE:</strong> Official government document.
+              Unauthorized reproduction is a criminal offense. Report suspicious
+              documents immediately.
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <!-- <div
+          style="
+            width: 100%;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+        > -->
+        <!-- <div
+          style="
+            background: rgba(255, 255, 255, 0.55);
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 2px solid #8b7355;
+            width: 90%;
+          "
+        >
+          <div
+            style="
+              font-size: 10px;
+              font-weight: bold;
+              color: #2c2416;
+              margin-bottom: 5px;
+            "
+          >
+            CONTACT US
+          </div>
+          <div style="font-size: 8px; color: #5d4e37; line-height: 1.5">
+            <strong>Dep. of Immigration and Emigration</strong><br />
+            "Suhurupaya", Sri Subhuthipura Road, Battaramulla<br />
+            <strong>Phone:</strong> 1962 / +94 112 101 500 |
+            <strong>Fax:</strong> +94 011 2885 358<br />
+            <strong>Email:</strong> controller@immigration.gov.lk
+          </div>
+        </div> -->
+        <!-- </div> -->
+      </div>
+    </div>
+  </body>
 </html>
